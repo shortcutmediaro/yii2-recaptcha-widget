@@ -99,15 +99,14 @@ class ReCaptcha3 extends InputWidget
             <<<JS
             "use strict";
             grecaptcha.ready(function() {
-            grecaptcha.execute("{$this->siteKey}", {action: "{$this->action}"}).then(function(token) {
-            jQuery("#" + "{$this->getReCaptchaId()}").val(token);
-
-        const jsCallback = "{$this->jsCallback}";
-        if (jsCallback) {
-            eval("(" + jsCallback + ")(token)");
-    }
-    });
-    });
+                grecaptcha.execute("{$this->siteKey}", {action: "{$this->action}"}).then(function(token) {
+                    jQuery("#" + "{$this->getReCaptchaId()}").val(token);
+                    const jsCallback = "{$this->jsCallback}";
+                    if (jsCallback) {
+                        eval("(" + jsCallback + ")(token)");
+                    }
+                });
+            });
         JS
         , $view::POS_READY);
 
