@@ -50,10 +50,10 @@ class ReCaptcha3 extends InputWidget
     public ?string $siteKey = null;
 
     /**
-     * @var string Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
+     * @var string|null Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
      * is not accessible.
      */
-    public mixed $jsApiUrl;
+    public ?string $jsApiUrl = null;
 
     /** @var string reCAPTCHA v3 action for this page. */
     public ?string $action = null;
@@ -97,19 +97,19 @@ class ReCaptcha3 extends InputWidget
         );
         $view->registerJs(
             <<<JS
-"use strict";
-grecaptcha.ready(function() {
-    grecaptcha.execute("{$this->siteKey}", {action: "{$this->action}"}).then(function(token) {
-        jQuery("#" + "{$this->getReCaptchaId()}").val(token);
+            "use strict";
+            grecaptcha.ready(function() {
+            grecaptcha.execute("{$this->siteKey}", {action: "{$this->action}"}).then(function(token) {
+            jQuery("#" + "{$this->getReCaptchaId()}").val(token);
 
         const jsCallback = "{$this->jsCallback}";
         if (jsCallback) {
             eval("(" + jsCallback + ")(token)");
-        }
+    }
     });
-});
-JS
-            , $view::POS_READY);
+    });
+        JS
+        , $view::POS_READY);
 
         $this->customFieldPrepare();
     }

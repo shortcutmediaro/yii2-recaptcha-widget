@@ -21,7 +21,7 @@ use yii\validators\Validator;
 abstract class ReCaptchaBaseValidator extends Validator
 {
     /** @var boolean Whether to skip this validator if the input is empty. */
-    public bool $skipOnEmpty = false;
+    public $skipOnEmpty;
 
     /** @var string|null The shared key between your site and ReCAPTCHA. */
     public ?string $secret = null;
@@ -82,10 +82,10 @@ abstract class ReCaptchaBaseValidator extends Validator
     protected function getResponse(string $value): array
     {
         $response = $this->httpClientRequest
-            ->setMethod('GET')
-            ->setUrl($this->siteVerifyUrl)
-            ->setData(['secret' => $this->secret, 'response' => $value, 'remoteip' => Yii::$app->request->userIP])
-            ->send();
+        ->setMethod('GET')
+        ->setUrl($this->siteVerifyUrl)
+        ->setData(['secret' => $this->secret, 'response' => $value, 'remoteip' => Yii::$app->request->userIP])
+        ->send();
         if (!$response->isOk) {
             throw new Exception('Unable connection to the captcha server. Status code ' . $response->statusCode);
         }

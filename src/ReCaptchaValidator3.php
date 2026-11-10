@@ -56,7 +56,7 @@ class ReCaptchaValidator3 extends ReCaptchaBaseValidator
      * @throws Exception
      * @throws \yii\base\InvalidParamException
      */
-    protected function validateValue(array|string $value): ?array
+    protected function validateValue($value)
     {
         if ($this->isValid === null) {
             if (!$value) {
