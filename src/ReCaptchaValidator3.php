@@ -24,14 +24,14 @@ class ReCaptchaValidator3 extends ReCaptchaBaseValidator
     public $threshold = 0.5;
 
     /** @var string|boolean Set to false if you don`t need to check action. */
-    public $action;
+    public string|bool $action = false;
 
     public function __construct(
-        $secret = null,
-        $siteVerifyUrl = null,
-        $checkHostName = null,
+        ?string $secret = null,
+        ?string $siteVerifyUrl = null,
+        ?bool $checkHostName = null,
         ?yii\httpclient\Request $httpClientRequest = null,
-        $config = [])
+        array $config = [])
     {
         if ($secret && !$this->secret) {
             $this->secret = $secret;
@@ -40,7 +40,7 @@ class ReCaptchaValidator3 extends ReCaptchaBaseValidator
         parent::__construct($siteVerifyUrl, $checkHostName, $httpClientRequest, $config);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->configComponentProcess();
@@ -51,12 +51,12 @@ class ReCaptchaValidator3 extends ReCaptchaBaseValidator
     }
 
     /**
-     * @param string|array $value
+     * @param array|string $value
      * @return array|null
      * @throws Exception
      * @throws \yii\base\InvalidParamException
      */
-    protected function validateValue($value)
+    protected function validateValue(array|string $value): ?array
     {
         if ($this->isValid === null) {
             if (!$value) {
@@ -86,7 +86,7 @@ class ReCaptchaValidator3 extends ReCaptchaBaseValidator
         return $this->isValid ? null : [$this->message, []];
     }
 
-    protected function configComponentProcess()
+    protected function configComponentProcess(): void
     {
         parent::configComponentProcess();
 

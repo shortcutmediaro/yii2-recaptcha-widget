@@ -46,23 +46,23 @@ use yii\widgets\InputWidget;
  */
 class ReCaptcha3 extends InputWidget
 {
-    /** @var string Your sitekey. */
-    public $siteKey;
+    /** @var string|null Your sitekey. */
+    public ?string $siteKey = null;
 
     /**
      * @var string Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
      * is not accessible.
      */
-    public $jsApiUrl;
+    public mixed $jsApiUrl;
 
     /** @var string reCAPTCHA v3 action for this page. */
-    public $action;
+    public ?string $action = null;
 
-    /** @var string Your JS callback function that's executed when reCAPTCHA executed. */
-    public $jsCallback;
+    /** @var string|null Your JS callback function that's executed when reCAPTCHA executed. */
+    public ?string $jsCallback = null;
 
     /** @var string */
-    public $configComponentName = 'reCaptcha';
+    public string $configComponentName = 'reCaptcha';
 
     public function __construct($siteKey = null, $jsApiUrl = null, $config = [])
     {
@@ -76,13 +76,13 @@ class ReCaptcha3 extends InputWidget
         parent::__construct($config);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->configComponentProcess();
     }
 
-    public function run()
+    public function run(): void
     {
         parent::run();
         $view = $this->view;
@@ -114,7 +114,7 @@ JS
         $this->customFieldPrepare();
     }
 
-    protected function customFieldPrepare()
+    protected function customFieldPrepare(): void
     {
         if ($this->hasModel()) {
             $inputName = Html::getInputName($this->model, $this->attribute);
@@ -141,12 +141,12 @@ JS
         return $this->id . '-' . $this->inputNameToId($this->name);
     }
 
-    protected function inputNameToId($name)
+    protected function inputNameToId($name): array|string
     {
         return \str_replace(['[]', '][', '[', ']', ' ', '.'], ['', '-', '-', '', '-', '-'], \strtolower($name));
     }
 
-    protected function configComponentProcess()
+    protected function configComponentProcess(): void
     {
         /** @var ReCaptchaConfig $reCaptchaConfig */
         $reCaptchaConfig = Yii::$app->get($this->configComponentName, false);

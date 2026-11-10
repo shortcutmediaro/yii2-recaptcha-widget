@@ -21,28 +21,28 @@ use yii\validators\Validator;
 abstract class ReCaptchaBaseValidator extends Validator
 {
     /** @var boolean Whether to skip this validator if the input is empty. */
-    public $skipOnEmpty = false;
+    public bool $skipOnEmpty = false;
 
-    /** @var string The shared key between your site and ReCAPTCHA. */
-    public $secret;
+    /** @var string|null The shared key between your site and ReCAPTCHA. */
+    public ?string $secret = null;
 
     /**
-     * @var string Use ReCaptchaConfig::SITE_VERIFY_URL_ALTERNATIVE when ReCaptchaConfig::SITE_VERIFY_URL_DEFAULT
+     * @var string|null Use ReCaptchaConfig::SITE_VERIFY_URL_ALTERNATIVE when ReCaptchaConfig::SITE_VERIFY_URL_DEFAULT
      * is not accessible. Default is ReCaptchaConfig::SITE_VERIFY_URL_DEFAULT.
      */
-    public $siteVerifyUrl;
+    public ?string $siteVerifyUrl = null;
 
-    /** @var \yii\httpclient\Request */
-    public $httpClientRequest;
+    /** @var yii\httpclient\Request|null */
+    public ?Yii\httpclient\Request $httpClientRequest = null;
 
     /** @var string */
-    public $configComponentName = 'reCaptcha';
+    public string $configComponentName = 'reCaptcha';
 
     /** @var boolean Check host name. Default is false. */
-    public $checkHostName;
+    public bool $checkHostName = false;
 
     /** @var boolean */
-    protected $isValid;
+    protected bool $isValid = false;
 
     public function __construct(
         $siteVerifyUrl,
@@ -64,7 +64,7 @@ abstract class ReCaptchaBaseValidator extends Validator
         parent::__construct($config);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
 
@@ -79,7 +79,7 @@ abstract class ReCaptchaBaseValidator extends Validator
      * @throws Exception
      * @throws \yii\base\InvalidParamException
      */
-    protected function getResponse($value)
+    protected function getResponse(string $value): array
     {
         $response = $this->httpClientRequest
             ->setMethod('GET')
@@ -93,7 +93,7 @@ abstract class ReCaptchaBaseValidator extends Validator
         return $response->data;
     }
 
-    protected function configComponentProcess()
+    protected function configComponentProcess(): void
     {
         /** @var ReCaptchaConfig $reCaptchaConfig */
         $reCaptchaConfig = Yii::$app->get($this->configComponentName, false);

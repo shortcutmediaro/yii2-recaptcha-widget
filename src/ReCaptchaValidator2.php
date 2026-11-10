@@ -19,15 +19,15 @@ use yii\base\InvalidConfigException;
  */
 class ReCaptchaValidator2 extends ReCaptchaBaseValidator
 {
-    /** @var string */
-    public $uncheckedMessage;
+    /** @var string|null */
+    public ?string $uncheckedMessage = null;
 
     public function __construct(
-        $secret = null,
-        $siteVerifyUrl = null,
-        $checkHostName = null,
+        ?string $secret = null,
+        ?string $siteVerifyUrl = null,
+        ?bool $checkHostName = null,
         ?yii\httpclient\Request $httpClientRequest = null,
-        $config = [])
+        array $config = [])
     {
         if ($secret && !$this->secret) {
             $this->secret = $secret;
@@ -36,7 +36,7 @@ class ReCaptchaValidator2 extends ReCaptchaBaseValidator
         parent::__construct($siteVerifyUrl, $checkHostName, $httpClientRequest, $config);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->configComponentProcess();
@@ -48,7 +48,7 @@ class ReCaptchaValidator2 extends ReCaptchaBaseValidator
      * @param \yii\web\View $view
      * @return string
      */
-    public function clientValidateAttribute($model, $attribute, $view)
+    public function clientValidateAttribute(\yii\base\Model $model, string $attribute, \yii\web\View $view): string
     {
         $message = \addslashes($this->uncheckedMessage ?: Yii::t(
             'yii',
@@ -64,12 +64,12 @@ JS;
     }
 
     /**
-     * @param string|array $value
+     * @param array|string $value
      * @return array|null
      * @throws Exception
      * @throws \yii\base\InvalidParamException
      */
-    protected function validateValue($value)
+    protected function validateValue(array|string $value): ?array
     {
         if ($this->isValid === null) {
             if (!$value) {
@@ -89,7 +89,7 @@ JS;
         return $this->isValid ? null : [$this->message, []];
     }
 
-    protected function configComponentProcess()
+    protected function configComponentProcess(): void
     {
         parent::configComponentProcess();
 
@@ -105,7 +105,7 @@ JS;
         }
     }
 
-    protected function getHostName()
+    protected function getHostName(): string|null
     {
         return Yii::$app->request->hostName;
     }

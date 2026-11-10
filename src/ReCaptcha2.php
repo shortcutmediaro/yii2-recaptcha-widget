@@ -42,56 +42,56 @@ use yii\widgets\InputWidget;
  */
 class ReCaptcha2 extends InputWidget
 {
-    const THEME_LIGHT = 'light';
-    const THEME_DARK = 'dark';
+    const string THEME_LIGHT = 'light';
+    const string THEME_DARK = 'dark';
 
-    const TYPE_IMAGE = 'image';
-    const TYPE_AUDIO = 'audio';
+    const string TYPE_IMAGE = 'image';
+    const string TYPE_AUDIO = 'audio';
 
-    const SIZE_NORMAL = 'normal';
-    const SIZE_COMPACT = 'compact';
+    const string SIZE_NORMAL = 'normal';
+    const string SIZE_COMPACT = 'compact';
 
-    /** @var string Your sitekey. */
-    public $siteKey;
+    /** @var string|null Your sitekey. */
+    public ?string $siteKey = null;
 
     /**
-     * @var string Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
+     * @var string|null Use [[ReCaptchaConfig::JS_API_URL_ALTERNATIVE]] when [[ReCaptchaConfig::JS_API_URL_DEFAULT]]
      * is not accessible.
      */
-    public $jsApiUrl;
+    public ?string $jsApiUrl = null;
 
     /** @var string The color theme of the widget. [[THEME_LIGHT]] (default) or [[THEME_DARK]] */
-    public $theme;
+    public string $theme;
 
     /** @var string The type of CAPTCHA to serve. [[TYPE_IMAGE]] (default) or [[TYPE_AUDIO]] */
-    public $type;
+    public string $type;
 
     /** @var string The size of the widget. [[SIZE_NORMAL]] (default) or [[SIZE_COMPACT]] */
-    public $size;
+    public string $size;
 
     /** @var integer The tabindex of the widget */
-    public $tabIndex;
+    public int $tabIndex;
 
-    /** @var string Your JS callback function that's executed when the user submits a successful reCAPTCHA response. */
-    public $jsCallback;
+    /** @var string|null Your JS callback function that's executed when the user submits a successful reCAPTCHA response. */
+    public ?string $jsCallback = null;
 
     /**
      * @var string Your JS callback function that's executed when the recaptcha response expires and the user
      * needs to solve a new CAPTCHA.
      */
-    public $jsExpiredCallback;
+    public string $jsExpiredCallback;
 
-    /** @var string Your JS callback function that's executed when reCAPTCHA encounters an error (usually network
+    /** @var string|null Your JS callback function that's executed when reCAPTCHA encounters an error (usually network
      * connectivity) and cannot continue until connectivity is restored. If you specify a function here, you are
      * responsible for informing the user that they should retry.
      */
-    public $jsErrorCallback;
+    public ?string $jsErrorCallback = null;
 
     /** @var string */
-    public $configComponentName = 'reCaptcha';
+    public string $configComponentName = 'reCaptcha';
 
     /** @var array Additional html widget options, such as `class`. */
-    public $widgetOptions = [];
+    public array $widgetOptions = [];
 
     public function __construct($siteKey = null, $jsApiUrl = null, $config = [])
     {
@@ -105,13 +105,13 @@ class ReCaptcha2 extends InputWidget
         parent::__construct($config);
     }
 
-    public function init()
+    public function init(): void
     {
         parent::init();
         $this->configComponentProcess();
     }
 
-    public function run()
+    public function run(): string
     {
         parent::run();
         $view = $this->view;
@@ -178,7 +178,7 @@ JS
         echo Html::tag('div', '', $this->buildDivOptions());
     }
 
-    protected function getReCaptchaId()
+    protected function getReCaptchaId(): string
     {
         if (isset($this->widgetOptions['id'])) {
             return $this->widgetOptions['id'];
@@ -191,7 +191,7 @@ JS
         return $this->id . '-' . $this->inputNameToId($this->name);
     }
 
-    protected function getLanguageSuffix()
+    protected function getLanguageSuffix(): string
     {
         $currentAppLanguage = Yii::$app->language;
         $langsExceptions = ['zh-CN', 'zh-TW', 'zh-TW'];
@@ -207,7 +207,7 @@ JS
         return \substr($currentAppLanguage, 0, \strpos($currentAppLanguage, '-'));
     }
 
-    protected function customFieldPrepare()
+    protected function customFieldPrepare(): string
     {
         $inputId = $this->getReCaptchaId();
 
@@ -223,7 +223,7 @@ JS
         echo Html::input('hidden', $inputName, null, $options);
     }
 
-    protected function buildDivOptions()
+    protected function buildDivOptions(): array
     {
         $divOptions = [
             'class' => 'g-recaptcha',
@@ -274,12 +274,12 @@ JS
         return $divOptions;
     }
 
-    protected function inputNameToId($name)
+    protected function inputNameToId($name): array|string
     {
         return \str_replace(['[]', '][', '[', ']', ' ', '.'], ['', '-', '-', '', '-', '-'], \strtolower($name));
     }
 
-    protected function configComponentProcess()
+    protected function configComponentProcess(): void
     {
         /** @var ReCaptchaConfig $reCaptchaConfig */
         $reCaptchaConfig = Yii::$app->get($this->configComponentName, false);
