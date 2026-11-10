@@ -5,7 +5,7 @@
  * @license http://opensource.org/licenses/MIT MIT
  */
 
-namespace himiklab\yii2\recaptcha;
+namespace shortcutmediaro\yii2\recaptcha;
 
 use Yii;
 use yii\base\InvalidConfigException;
@@ -34,7 +34,7 @@ use yii\base\InvalidConfigException;
  *
  * @see https://developers.google.com/recaptcha
  * @author HimikLab
- * @package himiklab\yii2\recaptcha
+ * @package shortcutmediaro\yii2\recaptcha
  * @deprecated
  */
 class ReCaptcha extends ReCaptcha2
